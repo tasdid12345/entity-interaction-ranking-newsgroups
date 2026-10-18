@@ -21,6 +21,29 @@ python analysis.py
 
 Results are written to `results.json`. Charts are saved to `figures/`.
 
+## Results (latest run)
+
+On 20 Newsgroups multi-term queries (100 test queries), nDCG@10 was 0.735 for a standard TF-IDF keyword ranker and 0.799 for my LightGBM lambdarank with query-term interaction features on the same held-out candidates, a gain of 0.063 from one split.
+
+| Metric | Value |
+|---|---|
+| baseline_score | 0.7355 |
+| improved_score | 0.7987 |
+| improvement | 0.06322 |
+| baseline_score_std | 0 |
+| improved_score_std | 0.003271 |
+| baseline_map | 0.1605 |
+| improved_map | 0.1786 |
+| baseline_recall_at_100 | 0.1763 |
+| improved_recall_at_100 | 0.1907 |
+| best_num_leaves | 31 |
+| cv_ndcg_best | 0.849 |
+| n_test_queries | 100 |
+
+Run on 2026-10-18. Full output: [results.json](results.json) · [run.log](run.log)
+
+Notes: Baseline is deterministic, so its std is 0. Candidates are the top-200 TF-IDF documents per query, so Recall@100 is bounded by that pool. Queries are built from train-split statistics and evaluated on held-out documents. Queries are shared between train and test (different documents). Relevance is topical, which favours lexical matching. sklearn's downloader does not expose a timeout, so retries wrap it. Results depend on this one split and seed set.
+
 ## Reference
 
 This project is motivated by the following paper:
