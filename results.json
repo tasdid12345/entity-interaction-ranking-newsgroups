@@ -1,0 +1,32 @@
+{
+  "question": "Can a learned LightGBM ranker that adds query-term interaction features beat a keyword TF-IDF cosine ranker at ranking documents for multi-term queries on public text?",
+  "method": "Queries of 2-3 distinctive terms per 20 Newsgroups group; relevance = same group; 70/30 stratified document split; both rankers re-rank the same top-200 TF-IDF candidates.",
+  "dataset": {
+    "name": "20 Newsgroups (sklearn fetch_20newsgroups, headers/footers/quotes removed)",
+    "source_url": "https://ndownloader.figshare.com/files/5975967",
+    "n_rows": 18846,
+    "n_train": 13192,
+    "n_test": 5654,
+    "same_as_paper": false,
+    "baseline_is_papers_method": false
+  },
+  "metric_name": "nDCG@10",
+  "higher_is_better": true,
+  "baseline": "Keyword ranker: TF-IDF cosine between query terms and each candidate document.",
+  "improved": "LightGBM lambdarank over the same candidates, using the TF-IDF score plus term co-occurrence, term-weight and SVD latent-similarity features.",
+  "metrics": {
+    "baseline_score": 0.735465221808912,
+    "improved_score": 0.7986894813057398,
+    "improvement": 0.06322425949682775,
+    "baseline_score_std": 0.0,
+    "improved_score_std": 0.0032706351110483364,
+    "baseline_map": 0.16051150829786295,
+    "improved_map": 0.17861112938845933,
+    "baseline_recall_at_100": 0.1763267346618858,
+    "improved_recall_at_100": 0.19065790756007284,
+    "best_num_leaves": 31,
+    "cv_ndcg_best": 0.8490107227082402,
+    "n_test_queries": 100
+  },
+  "notes": "Baseline is deterministic, so its std is 0. Candidates are the top-200 TF-IDF documents per query, so Recall@100 is bounded by that pool. Queries are built from train-split statistics and evaluated on held-out documents. Queries are shared between train and test (different documents). Relevance is topical, which favours lexical matching. sklearn's downloader does not expose a timeout, so retries wrap it. Results depend on this one split and seed set."
+}
